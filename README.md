@@ -1,8 +1,8 @@
-# LiveForge IDE
+# ATLAS
 
-**LiveForge IDE** is a source-available development environment for building, compiling, previewing, and visually modifying software through a two-sided live workspace. The project is designed for professional developers, software architects, systems programmers, tool builders, UI engineers, and research teams who need a tighter connection between source code, compiled output, runtime behaviour, and human interaction.
+**ATLAS** is a source-available development environment for building, compiling, previewing, and visually modifying software through a two-sided live workspace. The project is designed for professional developers, software architects, systems programmers, tool builders, UI engineers, and research teams who need a tighter connection between source code, compiled output, runtime behaviour, and human interaction.
 
-LiveForge IDE focuses on a central idea: software should be editable from both directions. A developer should be able to change the source code and see the compiled result immediately, while also being able to interact with the running software visually and have those interactions translated back into structured code changes.
+ATLAS focuses on a central idea: software should be editable from both directions. A developer should be able to change the source code and see the compiled result immediately, while also being able to interact with the running software visually and have those interactions translated back into structured code changes.
 
 The primary target is high-performance native development, especially C++, while the long-term design supports multiple languages, frameworks, renderers, and build systems.
 
@@ -10,9 +10,9 @@ The primary target is high-performance native development, especially C++, while
 
 ## Project Goal
 
-The goal of LiveForge IDE is to create a professional-grade coding environment where code, compilation, execution, rendering, interaction, and AI-assisted modification operate inside one continuous workflow.
+The goal of ATLAS is to create a professional-grade coding environment where code, compilation, execution, rendering, interaction, and AI-assisted modification operate inside one continuous workflow.
 
-LiveForge IDE is intended to reduce the gap between what a developer writes and what a user experiences. Instead of treating the running application as a disconnected output, the IDE treats the live application as an editable surface connected to the source tree.
+ATLAS is intended to reduce the gap between what a developer writes and what a user experiences. Instead of treating the running application as a disconnected output, the IDE treats the live application as an editable surface connected to the source tree.
 
 The project aims to support:
 
@@ -35,7 +35,7 @@ The project aims to support:
 
 Traditional IDEs are mostly text-first. Visual tools are often framework-specific and separated from the main development loop. AI coding tools can modify code, but they usually do not understand the running application as an editable, interactive system.
 
-LiveForge IDE combines these ideas into a single environment:
+ATLAS combines these ideas into a single environment:
 
 1. The developer edits code.
 2. The IDE builds or hot-reloads the software.
@@ -56,7 +56,7 @@ Code -> Build -> Run -> Render -> Interact -> Interpret -> Patch Code -> Rebuild
 
 ## Main Interface Design
 
-LiveForge IDE is designed as a full-screen application with a two-panel working model.
+ATLAS is designed as a full-screen application with a two-panel working model.
 
 ### Left Side: Code and Intelligence
 
@@ -99,7 +99,7 @@ This panel is responsible for understanding the application at the execution and
 
 ## Software Logic
 
-LiveForge IDE is based on a layered architecture.
+ATLAS is based on a layered architecture.
 
 ### 1. Project Indexing Layer
 
@@ -233,7 +233,7 @@ Validation may include:
 
 ## Core Abilities
 
-LiveForge IDE is designed to provide the following abilities.
+ATLAS is designed to provide the following abilities.
 
 ### AI Coding
 
@@ -286,7 +286,7 @@ This enables developers to see how code changes affect the real application expe
 
 ### Visual Editing
 
-LiveForge IDE supports visual modification of runtime elements where source mapping is available.
+ATLAS supports visual modification of runtime elements where source mapping is available.
 
 Visual editing may include:
 
@@ -335,7 +335,7 @@ The patch review flow includes:
 
 ## Design Philosophy
 
-LiveForge IDE follows several design principles.
+ATLAS follows several design principles.
 
 ### Source Code Remains the Authority
 
@@ -343,7 +343,7 @@ Visual editing is valuable only if it produces maintainable code. The source tre
 
 ### Framework Adapters Beat Guesswork
 
-A universal visual editor for every possible application is not reliable. LiveForge IDE is designed around adapters that understand specific languages, frameworks, and rendering systems.
+A universal visual editor for every possible application is not reliable. ATLAS is designed around adapters that understand specific languages, frameworks, and rendering systems.
 
 Examples:
 
@@ -372,7 +372,7 @@ The tool is designed for serious software engineering. It should support version
 
 ## Availability Model
 
-LiveForge IDE is source-available under the Business Source License 1.1.
+ATLAS is source-available under the Business Source License 1.1.
 
 The source code is available for inspection, learning, modification, redistribution, and non-production use under the terms of the license. Limited production use is allowed only under the Additional Use Grant in the `LICENSE` file. Commercial production use outside that grant requires a commercial license from the licensor.
 
@@ -384,7 +384,7 @@ This model is designed to balance professional transparency, developer access, c
 
 ## Intended Users
 
-LiveForge IDE is intended for:
+ATLAS is intended for:
 
 - C++ developers
 - Native application developers
@@ -404,11 +404,11 @@ LiveForge IDE is intended for:
 
 ### Native UI Development
 
-A developer builds a native C++ application, previews the compiled window inside LiveForge IDE, drags a panel to a new location, reviews the generated code patch, accepts the edit, and immediately sees the rebuilt result.
+A developer builds a native C++ application, previews the compiled window inside ATLAS, drags a panel to a new location, reviews the generated code patch, accepts the edit, and immediately sees the rebuilt result.
 
 ### Framework-Based UI Editing
 
-A developer opens a QML or Slint project, selects a button in the live preview, changes its size visually, and LiveForge IDE updates the correct declarative source file.
+A developer opens a QML or Slint project, selects a button in the live preview, changes its size visually, and ATLAS updates the correct declarative source file.
 
 ### Debugging Runtime Behaviour
 
@@ -513,7 +513,7 @@ The project is designed around these technical foundations:
 
 ## Repository Status
 
-This repository defines and develops LiveForge IDE as a professional source-available project. The design emphasizes correctness, transparency, extensibility, and developer control.
+This repository defines and develops ATLAS as a professional source-available project. The design emphasizes correctness, transparency, extensibility, and developer control.
 
 The project is not positioned as a simple code generator. It is a development environment for closing the loop between source code, compiled software, visual output, and human intent.
 
@@ -521,6 +521,6 @@ The project is not positioned as a simple code generator. It is a development en
 
 ## License
 
-LiveForge IDE is licensed under the **Business Source License 1.1**. See the `LICENSE` file for the full terms, including the Additional Use Grant, Change Date, and Change License.
+ATLAS is licensed under the **Business Source License 1.1**. See the `LICENSE` file for the full terms, including the Additional Use Grant, Change Date, and Change License.
 
 SPDX-License-Identifier: BUSL-1.1
