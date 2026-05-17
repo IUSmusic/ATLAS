@@ -1,526 +1,685 @@
 # ATLAS
 
-**ATLAS** is a source-available development environment for building, compiling, previewing, and visually modifying software through a two-sided live workspace. The project is designed for professional developers, software architects, systems programmers, tool builders, UI engineers, and research teams who need a tighter connection between source code, compiled output, runtime behaviour, and human interaction.
+**ATLAS** is a source-available, C++-first AI development environment for building, compiling, previewing, inspecting, and visually modifying software through a bidirectional live workspace.
 
-ATLAS focuses on a central idea: software should be editable from both directions. A developer should be able to change the source code and see the compiled result immediately, while also being able to interact with the running software visually and have those interactions translated back into structured code changes.
+ATLAS is designed for professional software developers, systems programmers, UI framework engineers, tool builders, AI coding researchers, game-tool developers, embedded engineers, and teams working on heavy compiled applications.
 
-The primary target is high-performance native development, especially C++, while the long-term design supports multiple languages, frameworks, renderers, and build systems.
-
----
-
-## Project Goal
-
-The goal of ATLAS is to create a professional-grade coding environment where code, compilation, execution, rendering, interaction, and AI-assisted modification operate inside one continuous workflow.
-
-ATLAS is intended to reduce the gap between what a developer writes and what a user experiences. Instead of treating the running application as a disconnected output, the IDE treats the live application as an editable surface connected to the source tree.
-
-The project aims to support:
-
-- AI-assisted coding across multiple languages
-- Strong native C++ support
-- Live build and execution workflows
-- A full-screen split workspace
-- A real-time compiled preview surface
-- Interaction-to-code translation
-- Visual inspection of runtime elements
-- Drag, drop, resize, reposition, and property editing
-- Source patch generation from runtime interactions
-- Project-aware refactoring
-- Build, test, debug, and execution feedback loops
-- Extensible framework adapters for different UI and rendering systems
-
----
-
-## Core Idea
-
-Traditional IDEs are mostly text-first. Visual tools are often framework-specific and separated from the main development loop. AI coding tools can modify code, but they usually do not understand the running application as an editable, interactive system.
-
-ATLAS combines these ideas into a single environment:
-
-1. The developer edits code.
-2. The IDE builds or hot-reloads the software.
-3. The compiled application appears in a live render viewer.
-4. The developer interacts with the running application.
-5. The IDE captures visual and behavioural changes.
-6. The system maps those changes back to source-level intent.
-7. The AI agent proposes or applies code changes.
-8. The application rebuilds, rerenders, and validates the result.
-
-This creates a bidirectional development loop:
+ATLAS is not a generic code editor with an AI chat box. It is an IDE architecture for connecting source code, compilation, live execution, visual interaction, grid-aware layout editing, runtime inspection, and AI agents into one controlled engineering loop.
 
 ```text
-Code -> Build -> Run -> Render -> Interact -> Interpret -> Patch Code -> Rebuild
+Code -> Build -> Run -> Preview -> Interact -> Interpret -> Patch -> Validate -> Rebuild
 ```
 
 ---
 
-## Main Interface Design
+## Repository Description
 
-ATLAS is designed as a full-screen application with a two-panel working model.
-
-### Left Side: Code and Intelligence
-
-The left side is the source-control and intelligence workspace. It contains:
-
-- Code editor
-- File explorer
-- AI coding assistant
-- Build configuration view
-- Compiler output
-- Diagnostics
-- Test results
-- Debug session state
-- Patch review interface
-- Refactor and migration tools
-- Project memory and architectural context
-
-This panel is responsible for understanding the software project at the source level.
-
-### Right Side: Live Render and Runtime Interaction
-
-The right side is the compiled application workspace. It contains:
-
-- Live compiled preview
-- Runtime window embedding
-- Visual inspector
-- Element selection overlay
-- Drag-and-drop editing
-- Resize handles
-- Layout guides
-- Property editor
-- Event recorder
-- Interaction timeline
-- Screenshot and frame capture
-- Runtime state viewer
-
-This panel is responsible for understanding the application at the execution and user-experience level.
+AI-assisted C++-first IDE with live compiled preview, isolated runtime execution, grid-aware visual editing, interaction-to-code translation, and source-aware AI agent orchestration.
 
 ---
 
-## Software Logic
+## Core Goal
 
-ATLAS is based on a layered architecture.
+ATLAS exists to close the distance between source code and the compiled application experience.
 
-### 1. Project Indexing Layer
+A developer should be able to write code, compile the program, view the running application inside the IDE, interact with the application visually, and convert those interactions into safe, reviewable source-code changes.
 
-The indexing layer scans and understands the project. It handles:
+The project is built around bidirectional development:
 
-- Source files
-- Build files
-- Header files
-- UI definitions
-- Assets
-- Configuration files
-- Tests
-- Documentation
-- Dependency metadata
+- Source code creates the compiled application.
+- The compiled application exposes runtime structure.
+- User interaction becomes structured intent.
+- Structured intent becomes a source patch.
+- Patches are reviewed, validated, and applied.
+- The preview rebuilds or hot-reloads.
 
-For C++ projects, this layer is designed around compiler-aware indexing using compile databases, language servers, abstract syntax trees, symbol graphs, and build-system metadata.
+---
 
-### 2. Build and Execution Layer
+## Recommended Technology Stack
 
-The build layer manages compilation and execution. It is responsible for:
+ATLAS should be implemented with a **Rust core**, **Slint UI**, and **C++ tooling integration**.
 
-- Build command discovery
-- CMake and Ninja integration
+```text
+Rust         -> IDE kernel, sandbox controller, IPC host, agent runtime, project graph
+Slint        -> primary ATLAS UI layer
+C++          -> primary target language, native adapters, preview integrations
+CMake/Ninja  -> default C++ build pipeline
+LLVM/Clang   -> parsing, diagnostics, AST rewriting, source mapping
+clangd       -> code intelligence and symbol indexing
+```
+
+### Language Decision
+
+Rust is recommended for the IDE kernel because ATLAS must coordinate processes, sandboxes, IPC, agents, build systems, and patch validation. These areas benefit from memory safety, strong concurrency, and strict control over system resources.
+
+C++ remains the primary target language and a first-class integration layer. ATLAS must deeply understand C++ projects, compile C++ efficiently, index C++ code, integrate with CMake and Ninja, use clangd, and support native preview workflows.
+
+| Area | Recommended Choice | Reason |
+| --- | --- | --- |
+| IDE kernel | Rust | Safe concurrency, process control, sandbox orchestration |
+| Primary target language | C++ | Professional native, systems, embedded, graphics, tools, and heavy compiled software |
+| UI framework | Slint | Lightweight declarative UI with Rust and C++ support |
+| Build pipeline | CMake + Ninja | Industry-standard C++ configuration with fast incremental builds |
+| Code intelligence | clangd + LLVM | C++ indexing, diagnostics, AST parsing, source rewriting |
+| AI agent runtime | Rust | Async orchestration, permissioned tools, controlled patch generation |
+| Plugin surface | Rust, C++, or WASM | Native performance with optional sandboxed extensions |
+
+Python and JavaScript may be used for extensions, prototypes, scripts, model adapters, and automation, but they are not recommended as the core runtime for ATLAS.
+
+Electron is not recommended as the main shell because ATLAS requires tight native process control, low overhead, compiled preview embedding, and predictable performance.
+
+---
+
+## User Interface Model
+
+ATLAS uses a full-screen, two-sided workspace.
+
+```text
++---------------------------------------------------------------+
+|                            ATLAS                              |
++-------------------------------+-------------------------------+
+| Left Workspace                | Right Workspace               |
+|                               |                               |
+| Project tree                  | Live compiled preview          |
+| Code editor                   | Runtime interaction surface    |
+| AI agent panel                | Grid overlay                   |
+| Build output                  | Selection handles              |
+| Diagnostics                   | Inspector overlay              |
+| Patch review                  | Visual event recorder          |
+| Terminal                      | Runtime state viewer           |
+|                               |                               |
++-------------------------------+-------------------------------+
+```
+
+### Left Workspace
+
+The left side is the source, build, and intelligence workspace.
+
+It contains:
+
+- Project tree
+- Code editor
+- Symbol search
+- AI command panel
+- Agent activity stream
+- Build configuration
 - Compiler diagnostics
-- Incremental builds
-- Hot reload where available
-- Process management
-- Runtime logging
-- Crash detection
-- Test execution
-- Artifact tracking
+- Static analysis output
+- Terminal
+- Test runner
+- Git status
+- Patch review
+- Diff viewer
+- Undo and rollback controls
 
-This layer connects source edits to running binaries.
+### Right Workspace
 
-### 3. Live Render Layer
+The right side is the live runtime and visual interaction workspace.
 
-The live render layer displays the compiled application inside the IDE. It may use direct embedding, remote rendering, process capture, framebuffer streaming, window capture, or framework-specific preview adapters depending on the target application.
+It contains:
 
-The render layer provides:
+- Compiled application preview
+- Runtime input forwarding
+- Grid overlay
+- Snap guides
+- Selection overlay
+- Resize handles
+- Property inspector
+- Scene graph panel
+- Layout constraint panel
+- Accessibility warnings
+- Visual event recorder
+- Runtime logs
+- FPS and performance telemetry
+- Process status
+- Sandbox status
 
-- Real-time preview
-- Input forwarding
-- Frame capture
-- Visual overlays
-- Selection geometry
-- Runtime metadata
-- Inspector hooks
+---
 
-### 4. Interaction Capture Layer
+## Virtual Runtime Environment
 
-The interaction layer records what the developer does inside the live preview.
+ATLAS must separate the IDE process from the compiled preview process.
 
-Examples include:
+The previewed application must never run inside the same trusted process as the IDE shell. A crash, memory corruption bug, infinite loop, malicious code path, AI-generated mistake, or untrusted project must not destroy IDE state or access the user's full environment.
 
-- Moving a UI element
-- Resizing a component
-- Reordering layout elements
-- Editing text content
-- Changing spacing
-- Modifying alignment
-- Adjusting colours
-- Selecting widgets
-- Triggering runtime events
-- Recording repeated user flows
+Recommended process model:
 
-The captured interaction is converted into a structured intent.
+```text
+ATLAS Host Process
+  |
+  |-- Project Indexer
+  |-- Build Controller
+  |-- Agent Controller
+  |-- Preview Supervisor
+        |
+        |-- Isolated Preview Process
+              |
+              |-- Compiled User Application
+              |-- Preview Adapter
+              |-- Runtime Metadata Bridge
+```
 
-Example:
+### Best Default Isolation Model
+
+The best default environment is a **sandboxed native process with optional container and microVM escalation**.
+
+| Mode | Use Case | Isolation | Performance |
+| --- | --- | --- | --- |
+| Native supervised process | Trusted local project | Low to medium | Highest |
+| OS sandbox | Normal project preview | Medium | Very high |
+| Container sandbox | AI-generated or semi-trusted project | Medium to high | High |
+| MicroVM sandbox | Untrusted code or remote execution | High | Medium |
+| Full VM | Extreme isolation | Very high | Low |
+
+ATLAS should start with OS-level sandboxing and container support. MicroVM support should be optional for untrusted code, remote execution, or enterprise security mode.
+
+### Platform Runtime Strategy
+
+#### Linux
+
+Use separate user processes, Linux namespaces, cgroups, seccomp, Landlock filesystem restrictions, AppArmor or SELinux where available, read-only mounts, project-directory-only access, no home-directory access by default, no root execution, optional containers, and optional microVM execution.
+
+#### Windows
+
+Use separate processes, Job Objects, AppContainer or low-integrity process mode, restricted tokens, process mitigation policies, controlled working directories, network restrictions where applicable, and optional Hyper-V or Windows Sandbox execution.
+
+#### macOS
+
+Use separate processes, Seatbelt sandbox profiles, hardened runtime where applicable, controlled entitlements, restricted filesystem access, temporary working directories, and optional virtualization framework execution for higher-risk code.
+
+---
+
+## Preview Process Architecture
+
+The live compiled preview is a supervised runtime session, not a static screenshot.
+
+```text
+ATLAS Host
+  |
+  |-- Preview Supervisor
+        |
+        |-- Launches preview process
+        |-- Loads preview adapter where supported
+        |-- Captures native window or offscreen framebuffer
+        |-- Forwards input events
+        |-- Receives runtime metadata
+        |-- Receives scene graph when supported
+        |-- Reports crashes, logs, telemetry, and sandbox events
+```
+
+### Preview Transport Options
+
+| Transport | Description | Use Case |
+| --- | --- | --- |
+| Native window embedding | Embed external app window inside ATLAS | Desktop apps |
+| Offscreen framebuffer | App renders to shared GPU or CPU buffer | Custom renderers, engines, controlled examples |
+| Remote frame streaming | App sends frames over IPC | Containers, remote build hosts, microVMs |
+| Framework-native preview | Slint, QML, web, or engine preview mode | Declarative UI frameworks |
+| Screenshot fallback | Periodic capture with limited interaction | Unsupported apps |
+
+Recommended first implementation:
+
+1. Native supervised process.
+2. Native window embedding where supported.
+3. Framework-native preview for Slint.
+4. Offscreen framebuffer adapter for examples.
+5. Containerized preview mode.
+
+---
+
+## IPC Design
+
+ATLAS requires structured communication between the host IDE and preview process.
+
+Recommended IPC channels:
+
+```text
+Control channel      -> JSON-RPC or gRPC
+Event channel        -> binary or JSON event stream
+Frame channel        -> shared memory, DMA-BUF, named shared memory, or socket stream
+Diagnostics channel  -> structured logs and process telemetry
+Agent channel        -> permissioned tool-call protocol controlled by the host
+```
+
+Example visual event:
 
 ```json
 {
-  "action": "resize",
-  "target": "PrimaryActionButton",
-  "from": { "width": 120, "height": 40 },
-  "to": { "width": 168, "height": 48 }
+  "type": "visual.resize",
+  "sessionId": "preview-001",
+  "target": {
+    "runtimeId": "button.primary",
+    "sourceId": "MainWindow.PrimaryActionButton"
+  },
+  "from": { "x": 320, "y": 184, "width": 128, "height": 40 },
+  "to": { "x": 320, "y": 184, "width": 168, "height": 48 },
+  "grid": { "unit": 8, "snapped": true }
 }
 ```
 
-### 5. Source Mapping Layer
+---
 
-The source mapping layer connects runtime elements to source code. It determines where a visual or behavioural change should be applied.
+## Grid View and Grid Understanding
 
-Depending on the framework, this may map to:
+ATLAS must include a first-class grid system. The grid is not just a visual overlay. It is part of the application logic, source mapping model, accessibility system, and AI context model.
 
-- C++ layout code
-- QML files
-- Slint files
-- XAML files
-- HTML/CSS
-- JSON configuration
-- Scene files
-- Engine metadata
-- Generated UI descriptors
-- Declarative layout definitions
+Recommended default:
 
-The source mapping layer is the key to reliable bidirectional editing.
+```text
+Base unit: 8 px
+Fine unit: 4 px
+Minimum interactive target: 44 x 44 px
+Default spacing: 8, 16, 24, 32, 40, 48, 64
+Default snap: enabled
+```
 
-### 6. AI Patch Layer
+The grid system provides:
 
-The AI patch layer converts structured intent into source changes. It does not blindly rewrite files. It analyses the project context, identifies the safest edit location, proposes a patch, validates the result, and explains the change.
+- Visual alignment
+- Drag snapping
+- Resize snapping
+- Layout consistency
+- Responsive structure
+- Accessibility enforcement
+- Source-code intent
+- AI-agent context
+- Property inspector normalization
+- Design-system compatibility
 
-The patch layer supports:
+Grid data must be available to the visual editor, AI agent, source mapper, property inspector, accessibility checker, layout validator, and patch generator.
 
-- Code generation
-- Refactoring
-- Error repair
-- UI change application
-- Build-failure correction
-- Runtime-behaviour adjustments
-- Multi-file edits
-- Migration assistance
-- Architecture-aware suggestions
+Example grid model:
 
-### 7. Validation Layer
+```json
+{
+  "grid": {
+    "unit": 8,
+    "fineUnit": 4,
+    "snap": true,
+    "columns": 12,
+    "gutter": 16,
+    "margin": 24
+  },
+  "element": {
+    "id": "PrimaryActionButton",
+    "x": 320,
+    "y": 184,
+    "width": 168,
+    "height": 48,
+    "columnStart": 6,
+    "columnSpan": 3,
+    "align": "center",
+    "touchTargetValid": true
+  }
+}
+```
 
-The validation layer checks that changes are correct before they are accepted.
-
-Validation may include:
-
-- Rebuild success
-- Static analysis
-- Unit tests
-- UI snapshot comparison
-- Runtime smoke tests
-- Compiler diagnostics
-- Linter results
-- User confirmation
-- Regression checks
+ATLAS should prefer constraints, anchors, rows, columns, and semantic layout rules over raw pixel coordinates when the framework supports them.
 
 ---
 
-## Core Abilities
+## Visual-to-Code Mapping
 
-ATLAS is designed to provide the following abilities.
+The central technical challenge of ATLAS is mapping runtime interaction back to source code.
 
-### AI Coding
+ATLAS supports four mapping strategies:
 
-The IDE includes an AI coding agent capable of understanding the project structure, reading source files, modifying code, generating implementations, explaining errors, and coordinating changes across multiple files.
+1. **Declarative mapping** for Slint, QML, XAML, HTML/CSS, XML UI files, and JSON UI schemas.
+2. **C++ AST mapping** for imperative UI code, Qt Widgets, Win32 wrappers, custom layout code, and engine tools.
+3. **Runtime metadata mapping** for applications instrumented with an ATLAS SDK.
+4. **AI-assisted mapping** for ambiguous, legacy, generated, or multi-file changes.
 
-The AI agent is designed to work with professional development workflows rather than isolated snippets.
+### Mapping Confidence
 
-### C++-First Native Development
+| Confidence | Meaning | Apply Policy |
+| --- | --- | --- |
+| High | Direct declarative source mapping | Stage automatically, show diff |
+| Medium | AST or metadata mapping with clear symbol | Show diff and validation |
+| Low | AI-inferred patch or ambiguous mapping | Explicit review required |
+| Blocked | Unsafe or unmapped | Ask for source selection or adapter support |
 
-The project prioritizes C++ because C++ remains central to systems software, desktop applications, game engines, embedded software, performance-critical tools, robotics, simulation, graphics, and infrastructure.
-
-C++ support is designed to include:
-
-- CMake projects
-- Header/source navigation
-- Compile database support
-- clangd-compatible indexing
-- Build diagnostics
-- Native process execution
-- Debugger integration
-- Framework-specific UI adapters
-- Incremental rebuild workflows
-
-### Multi-Language Expansion
-
-Although C++ is the primary target, the architecture is intended to support other languages through adapters.
-
-Potential language targets include:
-
-- C
-- C++
-- Rust
-- Python
-- JavaScript
-- TypeScript
-- C#
-- Java
-- Go
-- Kotlin
-- Swift
-- Lua
-
-The goal is not to treat every language identically, but to provide framework-specific intelligence where accurate source mapping is possible.
-
-### Live Compiled Preview
-
-The IDE provides a live preview of the built application. The preview is not a static mockup. It is the actual compiled application, a framework-native preview, or a controlled runtime representation depending on the project type.
-
-This enables developers to see how code changes affect the real application experience.
-
-### Visual Editing
-
-ATLAS supports visual modification of runtime elements where source mapping is available.
-
-Visual editing may include:
-
-- Dragging elements
-- Resizing components
-- Repositioning windows or panels
-- Editing layout values
-- Changing margins and padding
-- Modifying alignment
-- Adjusting typography
-- Updating colours
-- Editing component properties
-- Reordering interface sections
-
-### Interaction-to-Code Translation
-
-The central capability of the project is translating user interaction with the running software into code changes.
-
-This requires:
-
-- Runtime element identification
-- Geometry capture
-- Property extraction
-- Event interpretation
-- Source mapping
-- Patch generation
-- Rebuild validation
-
-The system is designed to be conservative. Where a change cannot be mapped safely, it should produce a reviewable patch instead of silently modifying code.
-
-### Professional Patch Review
-
-Every AI or visual edit should be visible, inspectable, and reversible.
-
-The patch review flow includes:
-
-- File-level diff
-- Explanation of intent
-- Build impact
-- Risk indicators
-- Test results
-- Accept/reject controls
-- Rollback support
+Low-confidence changes must never be applied silently.
 
 ---
 
-## Design Philosophy
+## Application Logic Subsystems
 
-ATLAS follows several design principles.
+ATLAS is divided into explicit subsystems.
 
-### Source Code Remains the Authority
+```text
+atlas-core
+atlas-ui
+atlas-project
+atlas-build
+atlas-preview
+atlas-sandbox
+atlas-ipc
+atlas-grid
+atlas-inspector
+atlas-mapper
+atlas-agent
+atlas-patch
+atlas-validation
+atlas-extensions
+```
 
-Visual editing is valuable only if it produces maintainable code. The source tree remains the canonical representation of the software.
+### atlas-core
 
-### Framework Adapters Beat Guesswork
+Owns startup, shutdown, workspace sessions, command routing, event routing, configuration, plugin registry, global undo model, telemetry control, and trust policy.
 
-A universal visual editor for every possible application is not reliable. ATLAS is designed around adapters that understand specific languages, frameworks, and rendering systems.
+### atlas-ui
 
-Examples:
+Owns the Slint shell, split workspace, editor views, agent panel, preview surface, inspector, diff viewer, terminal, grid overlay, scene graph, keyboard shortcuts, and theme system.
 
-- Qt/QML adapter
-- Slint adapter
-- Dear ImGui adapter
-- CMake adapter
-- Web adapter
-- Native desktop adapter
-- Game engine adapter
-- Custom renderer adapter
+### atlas-project
 
-### Safe Automation Over Blind Automation
+Owns project loading, file tree, workspace detection, language detection, build-system detection, symbol graph, source graph, asset graph, dependency graph, configuration discovery, and trust classification.
 
-The AI agent should explain and validate meaningful changes. It should not rewrite important code without traceability.
+### atlas-build
 
-### Runtime Behaviour Matters
+Owns CMake integration, Ninja integration, compiler detection, build presets, build execution, diagnostics, artifact tracking, test discovery, incremental rebuilds, clean builds, and cache integration.
 
-Compilation success is not enough. The IDE should help developers understand what the application does while it is running.
+### atlas-preview
 
-### Professional Workflows First
+Owns preview process launch, window embedding, frame transport, input forwarding, restart control, runtime logs, crash reports, preview session state, hot reload hooks, and runtime telemetry.
 
-The tool is designed for serious software engineering. It should support version control, reproducible builds, diagnostics, tests, review, and collaboration.
+### atlas-sandbox
 
----
+Owns security profiles, filesystem restrictions, network restrictions, process restrictions, CPU and memory limits, container integration, microVM integration, temporary workspaces, and preview permissions.
 
-## Availability Model
+### atlas-ipc
 
-ATLAS is source-available under the Business Source License 1.1.
+Owns protocol definition, message schema, request routing, event streams, shared memory, preview adapter transport, agent tool transport, serialization, and version negotiation.
 
-The source code is available for inspection, learning, modification, redistribution, and non-production use under the terms of the license. Limited production use is allowed only under the Additional Use Grant in the `LICENSE` file. Commercial production use outside that grant requires a commercial license from the licensor.
+### atlas-grid
 
-On the Change Date specified in the `LICENSE` file, the licensed version converts to the Change License.
+Owns grid units, snapping, alignment, column grids, baseline grids, breakpoints, constraints, spacing tokens, accessibility target checks, and grid-aware patch hints.
 
-This model is designed to balance professional transparency, developer access, commercial sustainability, and long-term open-source availability.
+### atlas-inspector
 
----
+Owns selected-element properties, runtime hierarchy, accessibility metadata, event bindings, layout constraints, style tokens, and source links.
 
-## Intended Users
+### atlas-mapper
 
-ATLAS is intended for:
+Owns runtime-to-source mapping, declarative rewriting, C++ AST rewriting, source range tracking, adapter integration, confidence scoring, semantic patch creation, and conflict detection.
 
-- C++ developers
-- Native application developers
-- UI framework engineers
-- Game and simulation tool builders
-- Systems programmers
-- Developer tooling teams
-- Startup engineering teams
-- Research laboratories
-- Product engineers
-- Software architecture teams
-- AI coding workflow researchers
+### atlas-agent
 
----
+Owns AI agent orchestration, model provider abstraction, context building, prompt routing, tool permissions, project memory, task planning, multi-agent coordination, patch generation, and safety constraints.
 
-## Example Use Cases
+### atlas-patch
 
-### Native UI Development
+Owns diffs, patch staging, patch review, atomic apply, revert, undo, conflict handling, Git integration, change explanations, and approval gates.
 
-A developer builds a native C++ application, previews the compiled window inside ATLAS, drags a panel to a new location, reviews the generated code patch, accepts the edit, and immediately sees the rebuilt result.
+### atlas-validation
 
-### Framework-Based UI Editing
+Owns formatting, static analysis, build validation, test validation, snapshot checks, accessibility checks, runtime smoke tests, security policy checks, and performance thresholds.
 
-A developer opens a QML or Slint project, selects a button in the live preview, changes its size visually, and ATLAS updates the correct declarative source file.
+### atlas-extensions
 
-### Debugging Runtime Behaviour
-
-A developer runs an application, captures a problematic interaction, and asks the AI agent to trace the event path, inspect related source files, and propose a fix.
-
-### Heavy Application Development
-
-A developer working on graphics, simulation, robotics, or engine tooling uses the live render viewer to inspect runtime output while keeping the build system, source code, logs, and AI assistant in one workspace.
-
-### Codebase Migration
-
-A team uses the AI agent to migrate project structure, update APIs, modernize C++ code, or move UI definitions into a more maintainable framework while validating each change through builds and tests.
+Owns framework adapters, language adapters, build adapters, preview adapters, agent tools, themes, grid presets, inspector plugins, and extension sandboxing.
 
 ---
 
-## Technical Direction
+## AI Agent Architecture
 
-The project is designed around these technical foundations:
+ATLAS uses agents as controlled engineering workers, not uncontrolled autonomous actors.
 
-- Native desktop shell
-- Split-pane full-screen UI
-- C++ project support
-- CMake and compile database integration
-- Language server integration
-- AI agent execution loop
-- Runtime process management
-- Live preview embedding
-- UI interaction overlays
-- Framework-specific source mappers
-- Patch generation and review
-- Build and test validation
-- Extension system for adapters
+Agents must be tool-driven, permissioned, observable, and reversible.
+
+```text
+User intent or visual event
+  |
+  v
+Agent Router
+  |
+  +-- Code Agent
+  +-- UI Agent
+  +-- Build Agent
+  +-- Debug Agent
+  +-- Refactor Agent
+  +-- Test Agent
+  +-- Security Agent
+  +-- Documentation Agent
+  |
+  v
+Patch Generator
+  |
+  v
+Validation Pipeline
+  |
+  v
+Human Review
+  |
+  v
+Apply / Reject
+```
+
+Agent rules:
+
+1. Agents cannot directly write to the working tree without a patch stage.
+2. Agents cannot run commands without declared permissions.
+3. Agents cannot access files outside the trusted workspace unless approved.
+4. Agents cannot send private source code to external providers unless allowed by workspace policy.
+5. Agents cannot install dependencies without approval.
+6. Agents cannot disable tests or security checks to make a patch pass.
+7. Agents cannot silently change licensing files.
+8. Agents cannot apply low-confidence visual-to-code mappings without human review.
+9. Agents cannot run as root.
+10. Agents must produce reversible changes.
 
 ---
 
-## Development Roadmap
+## Framework Adapter Model
 
-### Phase 1: Core IDE Shell
+ATLAS must not pretend all UI frameworks are identical. Reliable visual-to-code editing requires framework-specific adapters.
 
-- Full-screen split interface
-- File explorer
-- Code editor
+Initial adapter order:
+
+1. Slint adapter
+2. QML adapter
+3. Qt Widgets adapter
+4. Dear ImGui inspection adapter
+5. Web adapter
+6. Custom C++ SDK adapter
+7. Game or engine adapter
+
+A framework adapter provides runtime element discovery, scene graph extraction, property schema, source mapping, hot reload support, preview launch rules, grid semantics, accessibility metadata, patch rules, and validation rules.
+
+---
+
+## Validation Pipeline
+
+Every significant change passes through validation.
+
+```text
+Patch generated
+  |
+  +-- Format check
+  +-- Static analysis
+  +-- Build
+  +-- Unit tests
+  +-- UI snapshot test
+  +-- Accessibility check
+  +-- Runtime smoke test
+  +-- Security policy check
+  |
+Result -> Review -> Apply or Reject
+```
+
+ATLAS should not treat an AI patch as correct until it has been validated.
+
+---
+
+## Repository Structure
+
+```text
+atlas/
+  README.md
+  LICENSE
+  SECURITY.md
+  ARCHITECTURE.md
+  ROADMAP.md
+  AGENTS.md
+  GRID.md
+  CONTRIBUTING.md
+  docs/
+    preview-runtime.md
+    sandboxing.md
+    visual-to-code-mapping.md
+    framework-adapters.md
+    ai-agent-runtime.md
+  crates/
+    atlas-core/
+    atlas-ui/
+    atlas-project/
+    atlas-build/
+    atlas-preview/
+    atlas-sandbox/
+    atlas-ipc/
+    atlas-grid/
+    atlas-inspector/
+    atlas-mapper/
+    atlas-agent/
+    atlas-patch/
+    atlas-validation/
+    atlas-extensions/
+  adapters/
+    slint/
+    qml/
+    qt-widgets/
+    imgui/
+    web/
+    custom-sdk/
+  examples/
+    cpp-slint-basic/
+    cpp-qml-basic/
+    cpp-widgets-basic/
+    sandbox-preview/
+    visual-resize-patch/
+  tests/
+    mapper/
+    grid/
+    preview/
+    sandbox/
+    agents/
+```
+
+---
+
+## Roadmap
+
+### Phase 1: ATLAS Shell
+
+- Slint-based full-screen IDE shell
+- Two-panel workspace
+- File tree
+- Editor placeholder
 - Terminal panel
 - Build output panel
-- Project loader
-- Basic CMake support
+- Preview placeholder
+- Command bus
+- Workspace state model
 
-### Phase 2: C++ Build and Run Loop
+### Phase 2: C++ Build and Project Loading
 
-- Compile database loading
-- CMake configuration
-- Incremental builds
+- CMake project detection
+- Ninja build support
+- Compile database generation
+- clangd integration
+- Compiler diagnostics
 - Executable discovery
-- Runtime process launch
-- Log capture
-- Error diagnostics
+- CTest integration
 
-### Phase 3: Live Render Viewer
+### Phase 3: Preview Supervisor
 
-- Application preview embedding
+- Separate preview process
+- Runtime logs
+- Crash detection
+- Preview restart
+- Native window embedding
 - Input forwarding
-- Frame capture
-- Runtime restart controls
-- Preview session state
+- Preview status panel
 
-### Phase 4: AI Coding Agent
+### Phase 4: Sandboxed Preview
 
-- Project-aware code edits
-- Multi-file patch generation
-- Build-error repair
-- Code explanation
-- Refactor support
-- Diff review
+- Linux sandbox profile
+- Windows restricted process profile
+- macOS sandbox profile
+- Container preview mode
+- Permission model
+- Workspace-only filesystem policy
 
-### Phase 5: Visual Interaction Capture
+### Phase 5: Grid System
 
-- Selection overlays
-- Drag and resize capture
-- Property editing
-- Interaction event recording
-- Structured intent model
+- 8-unit grid model
+- Preview overlay
+- Snapping
+- Alignment guides
+- Grid property inspector
+- Accessibility target checks
+- Grid-aware event model
 
-### Phase 6: Source Mapping
+### Phase 6: Slint Adapter
 
-- Declarative UI mapping
-- C++ symbol mapping
-- Framework adapters
-- Patch target resolution
-- Confidence scoring
+- Parse Slint components
+- Map runtime elements to source
+- Select preview elements
+- Modify properties
+- Apply grid-aware layout patches
+- Reload preview
+- Validate generated Slint changes
 
-### Phase 7: Validation and Professionalization
+### Phase 7: Patch Review
 
-- Test runner integration
-- Snapshot checks
-- Regression detection
-- Plugin system
+- Diff viewer
+- Patch staging
+- Accept and reject controls
+- Undo and rollback
+- Git integration
+- Patch explanations
+
+### Phase 8: AI Agent Runtime
+
+- Agent router
+- Model provider abstraction
+- Tool permission system
+- Code Agent
+- UI Agent
+- Build Agent
+- Debug Agent
+- Test Agent
+- Security Agent
+- Documentation Agent
+
+### Phase 9: C++ AST Mapping
+
+- LibTooling support
+- AST matchers
+- Setter-call mapping
+- Object-name mapping
+- Qt Widgets adapter
+- Source range confidence scoring
+
+### Phase 10: Professional Release
+
+- Examples
+- CI
 - Documentation
-- Packaging
+- Installers
+- Extension SDK
 - Commercial licensing workflow
 
 ---
 
-## Repository Status
+## Availability
 
-This repository defines and develops ATLAS as a professional source-available project. The design emphasizes correctness, transparency, extensibility, and developer control.
+ATLAS is source-available under the Business Source License 1.1.
 
-The project is not positioned as a simple code generator. It is a development environment for closing the loop between source code, compiled software, visual output, and human intent.
+The source is available for inspection, learning, modification, redistribution, internal development, internal testing, evaluation, education, academic research, non-commercial research, demonstrations, and non-public prototypes under the terms stated in the `LICENSE` file.
 
----
+Commercial production use outside the Additional Use Grant requires a separate commercial license from the licensor.
 
-## License
-
-ATLAS is licensed under the **Business Source License 1.1**. See the `LICENSE` file for the full terms, including the Additional Use Grant, Change Date, and Change License.
+On the Change Date stated in the `LICENSE` file, the covered version converts to the Change License.
 
 SPDX-License-Identifier: BUSL-1.1

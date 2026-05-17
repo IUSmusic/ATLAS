@@ -1,1 +1,1 @@
-AI-assisted C++-first IDE with live compiled preview, bidirectional visual editing, interaction-to-code translation, and source-aware patch generation.
+AI-assisted C++-first IDE with live compiled preview, isolated runtime execution, grid-aware visual editing, interaction-to-code translation, and source-aware AI agent orchestration.
