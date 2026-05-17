@@ -1,0 +1,1 @@
+AI-assisted C++-first IDE with live compiled preview, bidirectional visual editing, interaction-to-code translation, and source-aware patch generation.
